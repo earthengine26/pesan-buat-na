@@ -9,54 +9,77 @@
     <style>
         body { 
             font-family: 'Quicksand', sans-serif; 
-            /* BACKGROUND POLOS TAPI WAH (GRADIENT MEWAH) */
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-            color: #f8fafc; display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; margin: 0; overflow: hidden; text-align: center;
-            transition: all 1.5s ease;
-        }
-
-        /* Saat tombol diklik, background berubah jadi gradasi yang lebih terang/wah */
-        .bg-active {
-            background: radial-gradient(circle at center, #312e81 0%, #0f172a 100%) !important;
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center;
+            /* LATAR BELAKANG POLOS TAPI MEWAH */
+            background: #0f172a; /* Warna dasar gelap */
+            background: radial-gradient(circle, #1e293b 0%, #020617 100%);
+            color: #f8fafc;
+            overflow: hidden;
         }
 
         .container { 
-            background: rgba(30, 41, 59, 0.7); 
+            background: rgba(255, 255, 255, 0.03); 
             backdrop-filter: blur(15px); 
             -webkit-backdrop-filter: blur(15px);
-            padding: 35px; border-radius: 24px; max-width: 350px; width: 85%;
-            border: 1px solid rgba(255,255,255,0.1); z-index: 10;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            padding: 40px 30px; 
+            border-radius: 28px; 
+            max-width: 350px; 
+            width: 85%;
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            z-index: 10;
         }
         
         h1 { color: #fbbf24; font-size: 2.5rem; margin: 0; font-family: 'Fredoka', sans-serif; }
         #messageContent { display: none; margin-top: 20px; }
         
         .ps { 
-            font-family: 'Fredoka', sans-serif; font-size: 1.3rem; 
-            color: #f472b6; margin-top: 20px; display: block;
-            text-shadow: 0 0 10px rgba(244, 114, 182, 0.3);
+            font-family: 'Fredoka', sans-serif; 
+            font-size: 1.3rem; 
+            color: #f472b6; 
+            margin-top: 20px; 
+            display: block;
+            text-shadow: 0 0 15px rgba(244, 114, 182, 0.4);
         }
 
         .yt-link {
-            display: inline-block; margin-top: 25px; padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05); border: 1px solid #ef4444;
-            color: #ef4444; text-decoration: none; border-radius: 12px; 
-            font-size: 0.9rem; font-weight: bold; transition: 0.3s;
+            display: inline-block; 
+            margin-top: 25px; 
+            padding: 12px 20px;
+            background: rgba(239, 68, 68, 0.1); 
+            border: 1px solid #ef4444;
+            color: #ef4444; 
+            text-decoration: none; 
+            border-radius: 12px; 
+            font-size: 0.85rem; 
+            font-weight: bold; 
+            transition: 0.3s;
         }
         .yt-link:hover { background: #ef4444; color: #fff; }
 
-        .warning-text { font-size: 0.8rem; color: #94a3b8; margin-top: 15px; font-style: italic; }
+        .warning-text { font-size: 0.75rem; color: #94a3b8; margin-top: 20px; font-style: italic; line-height: 1.4; }
         
         .btn-open { 
-            background: linear-gradient(45deg, #fbbf24, #f59e0b); 
-            color: #000; padding: 15px 35px; border: none; 
-            border-radius: 50px; font-weight: bold; cursor: pointer; 
-            margin-top: 20px; font-size: 1rem; box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+            background: #fbbf24; 
+            color: #000; 
+            padding: 16px 35px; 
+            border: none; 
+            border-radius: 50px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            margin-top: 25px; 
+            font-size: 1rem;
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.2);
+            transition: 0.3s;
         }
+        .btn-open:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(251, 191, 36, 0.3); }
 
-        .fade-out { animation: fadeOut 1s forwards; }
+        .fade-out { animation: fadeOut 1.2s forwards; }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
     </style>
 </head>
@@ -65,7 +88,7 @@
         <div id="intro">
             <span style="font-size: 3.5rem">🎓</span>
             <h1>For You</h1>
-            <p style="opacity: 0.8">I have a special message for you.</p>
+            <p style="opacity: 0.7; font-weight: 400;">I have a special message for you.</p>
             <button class="btn-open" onclick="startShow()">Open Message ✨</button>
         </div>
 
@@ -84,16 +107,13 @@
             <div id="afterEffect" style="display: none; padding: 10px;">
                 <h2 style="color: #fbbf24;">Oops!</h2>
                 <p>Pesannya sudah hangus! Siapa suruh nggak di-screenshot? Hehe 😜</p>
-                <p style="font-size: 0.8rem; opacity: 0.6;">Good luck in your next journey!</p>
+                <p style="font-size: 0.8rem; opacity: 0.5;">Good luck on your journey!</p>
             </div>
         </div>
     </div>
 
     <script>
         function startShow() {
-            // Efek background berubah jadi lebih 'wah'
-            document.body.classList.add('bg-active');
-            
             document.getElementById('intro').style.display = 'none';
             document.getElementById('messageContent').style.display = 'block';
             
@@ -103,7 +123,7 @@
                 setTimeout(function() {
                     document.getElementById('theMessage').style.display = 'none';
                     document.getElementById('afterEffect').style.display = 'block';
-                }, 1000);
+                }, 1200);
             }, 30000);
 
             // KONFETI 3 DETIK
