@@ -48,12 +48,11 @@
                 <div style="line-height: 1.6; font-weight: 500;">Congratulations on your graduation! I hope all your dreams come true one by one. Honestly, I’m speechless and don’t know what else to say, but anyway, congrats!</div>
                 <div class="ps">"By the way, the more I look at you, the prettier you get, haha."</div>
                 <a href="https://youtu.be/GIy9ZbH0sHo?si=SMXQ5dp6zfkdBOhX" target="_blank" class="yt-link">🎵 Listen to: Tulus - Interaksi</a>
-                <div class="warning-text">Pesan ini akan hilang dalam 20 Detik, Kalo mau denger lagu pencet aja ya linknya haha</div>
+                <div class="warning-text">Pesan ini akan hilang dalam 30 Detik, Kalo mau denger lagu pencet aja ya linknya haha</div>
             </div>
             <div id="afterEffect" style="display: none; padding: 20px;">
                 <h2 style="color: #fbbf24;">Oops!</h2>
                 <p>Pesannya sudah hangus! Siapa suruh nggak di-screenshot? Hehe 😜</p>
-                <p style="font-size: 0.9rem;">Dah ya, sukses buat ke depannya!</p>
             </div>
         </div>
     </div>
@@ -66,16 +65,17 @@
             document.getElementById('intro').style.display = 'none';
             document.getElementById('messageContent').style.display = 'block';
             
-            // TIMER DIUBAH KE 20 DETIK (20000 ms)
+            // TIMER PESAN: 30 DETIK
             setTimeout(function() {
                 document.getElementById('theMessage').classList.add('fade-out');
                 setTimeout(function() {
                     document.getElementById('theMessage').style.display = 'none';
                     document.getElementById('afterEffect').style.display = 'block';
                 }, 1000);
-            }, 20000);
+            }, 30000);
 
-            var end = Date.now() + (15 * 1000);
+            // KONFETI: DIUBAH KE 5 DETIK (5000 ms)
+            var end = Date.now() + (5 * 1000); 
             (function frame() {
                 confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#fbbf24', '#f472b6', '#ffffff'] });
                 confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#fbbf24', '#f472b6', '#ffffff'] });
