@@ -31,7 +31,6 @@
             color: #f472b6; margin-top: 20px; display: block; line-height: 1.4;
         }
 
-        /* Gaya Tombol Link YouTube */
         .yt-link {
             display: inline-block; margin-top: 25px; padding: 10px 20px;
             background: rgba(255, 255, 255, 0.1); border: 1px solid #ff0000;
@@ -40,17 +39,25 @@
         }
         .yt-link:hover { background: #ff0000; color: #fff; }
 
+        .warning-text {
+            font-size: 0.8rem; color: #cbd5e1; margin-top: 15px; 
+            font-style: italic; opacity: 0.9; line-height: 1.4;
+        }
+
         .btn-open { 
             background: #fbbf24; color: #000; padding: 15px 30px; border: none; 
             border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 20px;
             font-size: 1rem;
         }
+        
+        .fade-out { animation: fadeOut 1s forwards; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
     </style>
 </head>
 <body>
     <div class="overlay" id="bgOverlay"></div>
     
-    <div class="container">
+    <div class="container" id="mainCard">
         <div id="intro">
             <span style="font-size: 3rem">🎓</span>
             <h1>For You</h1>
@@ -59,12 +66,22 @@
         </div>
 
         <div id="messageContent">
-            <div style="line-height: 1.6; font-weight: 500;">Congratulations on your graduation! I hope all your dreams come true one by one. Honestly, I’m speechless and don’t know what else to say, but anyway, congrats!</div>
-            <div class="ps">"By the way, the more I look at you, the prettier you get, haha."</div>
+            <div id="theMessage">
+                <div style="line-height: 1.6; font-weight: 500;">Congratulations on your graduation! I hope all your dreams come true one by one. Honestly, I’m speechless and don’t know what else to say, but anyway, congrats!</div>
+                <div class="ps">"By the way, the more I look at you, the prettier you get, haha."</div>
+                
+                <a href="https://youtu.be/GIy9ZbH0sHo?si=SMXQ5dp6zfkdBOhX" target="_blank" class="yt-link">
+                    🎵 Listen to: Tulus - Interaksi
+                </a>
+                
+                <div class="warning-text">Pesan ini akan hilang dalam 30 Detik, Kalo mau denger lagu pencet aja ya linknya haha</div>
+            </div>
             
-            <a href="https://youtu.be/GIy9ZbH0sHo?si=SMXQ5dp6zfkdBOhX" target="_blank" class="yt-link">
-                🎵 Listen to: Tulus - Interaksi
-            </a>
+            <div id="afterEffect" style="display: none; padding: 20px;">
+                <h2 style="color: #fbbf24;">Oops!</h2>
+                <p>Pesannya sudah hangus! Siapa suruh nggak di-screenshot? Hehe 😜</p>
+                <p style="font-size: 0.9rem;">Dah ya, selamat merayakan kelulusan!</p>
+            </div>
         </div>
     </div>
 
@@ -72,15 +89,20 @@
         const linkFoto = "https://images.pexels.com/photos/6871906/pexels-photo-6871906.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
 
         function startShow() {
-            // Ganti Background
             document.body.style.backgroundImage = `url('${linkFoto}')`;
             document.getElementById('bgOverlay').style.display = 'block';
-            
-            // Munculkan Isi Pesan
             document.getElementById('intro').style.display = 'none';
             document.getElementById('messageContent').style.display = 'block';
             
-            // Konfeti 15 Detik
+            // Timer 30 Detik (30000 ms)
+            setTimeout(function() {
+                document.getElementById('theMessage').classList.add('fade-out');
+                setTimeout(function() {
+                    document.getElementById('theMessage').style.display = 'none';
+                    document.getElementById('afterEffect').style.display = 'block';
+                }, 1000);
+            }, 30000);
+
             var end = Date.now() + (15 * 1000);
             (function frame() {
                 confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#fbbf24', '#f472b6', '#ffffff'] });
