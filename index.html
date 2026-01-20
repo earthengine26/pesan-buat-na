@@ -8,93 +8,118 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root { --bg: #0b1120; --card: #1e293b; --text: #f8fafc; --accent: #fbbf24; --pink: #f472b6; }
-        body { font-family: 'Quicksand', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; text-align: center; }
-        .container { background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(15px); padding: 40px 25px; border-radius: 24px; max-width: 450px; width: 85%; z-index: 10; border: 1px solid rgba(255,255,255,0.1); }
-        h1 { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 3.5rem; margin: 0; }
-        
-        /* SEMBUNYIKAN UCAPAN DI AWAL */
-        #messageContent { display: none; margin-top: 20px; text-align: center; }
-        .main-text { line-height: 1.8; font-size: 1.1rem; margin-bottom: 20px; text-align: center; }
-        .ps { font-family: 'Dancing Script', cursive; font-size: 1.6rem; color: var(--pink); text-align: center; }
+        body { 
+            font-family: 'Quicksand', sans-serif; background: var(--bg); color: var(--text); 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; overflow: hidden; touch-action: none;
+        }
 
-        .btn-open { background: linear-gradient(45deg, var(--accent), #f59e0b); color: #000; padding: 15px 35px; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        /* Container Kartu yang Bisa Digeser */
+        .card-wrapper { position: relative; cursor: grab; z-index: 10; user-select: none; }
+        .card-wrapper:active { cursor: grabbing; }
+
+        .container { 
+            background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(15px); 
+            padding: 30px 20px; border-radius: 24px; 
+            max-width: 380px; width: 85vw; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 2.8rem; margin: 10px 0; }
         
-        /* Youtube Player Invisible */
-        #player { position: absolute; top: -1000px; left: -1000px; }
+        /* Gaya Foto */
+        .profile-img {
+            width: 150px; height: 150px;
+            border-radius: 50%; border: 4px solid var(--accent);
+            margin: 0 auto 15px auto; object-fit: cover;
+            display: none; /* Sembunyi di awal */
+            animation: zoomIn 0.8s ease-out;
+        }
+
+        /* PESAN SEMBUNYI DI AWAL */
+        #messageContent { display: none; margin-top: 15px; text-align: center; }
+        .main-text { line-height: 1.6; font-size: 1rem; margin-bottom: 15px; }
+        .ps { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: var(--pink); }
+        
+        .btn-open { 
+            background: linear-gradient(45deg, var(--accent), #f59e0b); 
+            color: #000; padding: 15px 35px; border: none; border-radius: 50px; 
+            font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px; 
+            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
+        }
+        
+        /* Player YouTube Tersembunyi */
+        #yt-player { position: absolute; top: -100px; left: -100px; width: 1px; height: 1px; opacity: 0; }
+        
+        @keyframes zoomIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
+    <div id="yt-player"></div>
+    
+    <div class="card-wrapper" id="draggableCard">
+        <div class="container">
+            <div id="intro">
+                <span style="font-size: 3rem">🎓</span>
+                <h1>For You</h1>
+                <p>I have a special message for your big day.</p>
+                <button class="btn-open" onclick="startShow(event)">Open Message ✨</button>
+            </div>
 
-    <div id="player"></div>
-
-    <div class="container">
-        <div id="intro">
-            <span style="font-size: 3.5rem">🎓</span>
-            <h1>For You</h1>
-            <p>I have a special message for your big day.</p>
-            <button class="btn-open" onclick="startShow()">Open Message ✨</button>
-        </div>
-
-        <div id="messageContent">
-            <div class="main-text">Congratulations on your graduation! I hope all your dreams come true one by one. I wish you the best of luck with everything you do. Honestly, I’m speechless and don’t know what else to say, but anyway, congrats!</div>
-            <div class="ps">"By the way, the more I look at you, the prettier you get, haha."</div>
+            <img src="https://via.placeholder.com/150" id="photo" class="profile-img" alt="Graduation Photo">
+            
+            <div id="messageContent">
+                <div class="main-text">Congratulations on your graduation! I hope all your dreams come true one by one. I wish you the best of luck with everything you do. Honestly, I’m speechless and don’t know what else to say, but anyway, congrats!</div>
+                <div class="ps">"By the way, the more I look at you, the prettier you get, haha."</div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Load YouTube IFrame API
+        // Load YouTube API
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
+        
         var player;
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '1',
-                width: '1',
-                videoId: 'mS_6Fv89_C8', // ID Tulus - Hati-hati di jalan
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'modestbranding': 1,
-                    'loop': 1
-                },
-                events: {
-                    'onReady': onPlayerReady
-                }
+            player = new YT.Player('yt-player', { 
+                height: '1', width: '1', videoId: 'mS_6Fv89_C8',
+                playerVars: { 'autoplay': 0, 'controls': 0 }
             });
         }
 
-        function onPlayerReady(event) {
-            // Player is ready, but we wait for user click to play
-        }
-
-        function startShow() {
-            // 1. Putar Lagu
-            if (player) {
-                player.playVideo();
-            }
-
-            // 2. Sembunyikan tombol, munculkan ucapan
+        function startShow(e) {
+            e.stopPropagation();
+            if (player && player.playVideo) player.playVideo();
+            
             document.getElementById('intro').style.display = 'none';
+            document.getElementById('photo').style.display = 'block';
             document.getElementById('messageContent').style.display = 'block';
-
-            // 3. Efek Kembang Api 15 Detik
             celebrate();
         }
 
         function celebrate() {
-            var duration = 15 * 1000;
-            var animationEnd = Date.now() + duration;
+            var duration = 15 * 1000; // Efek 15 Detik
+            var end = Date.now() + duration;
             (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#fbbf24', '#ffffff', '#f472b6'] });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#fbbf24', '#ffffff', '#f472b6'] });
-                if (Date.now() < animationEnd) {
-                    requestAnimationFrame(frame);
-                }
+                confetti({ particleCount: 2, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#fbbf24', '#f472b6', '#ffffff'] });
+                confetti({ particleCount: 2, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#fbbf24', '#f472b6', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
             }());
         }
+
+        // Fitur Geser Kartu (Draggable)
+        const card = document.getElementById('draggableCard');
+        let isDragging = false, startX, startY, initialX = 0, initialY = 0;
+        const start = (e) => { isDragging = true; startX = (e.pageX || e.touches[0].pageX) - initialX; startY = (e.pageY || e.touches[0].pageY) - initialY; };
+        const move = (e) => { if (!isDragging) return; initialX = (e.pageX || e.touches[0].pageX) - startX; initialY = (e.pageY || e.touches[0].pageY) - startY; card.style.transform = `translate(${initialX}px, ${initialY}px)`; };
+        const stop = () => isDragging = false;
+        card.addEventListener('mousedown', start); window.addEventListener('mousemove', move); window.addEventListener('mouseup', stop);
+        card.addEventListener('touchstart', start); window.addEventListener('touchmove', move); window.addEventListener('touchend', stop);
     </script>
 </body>
 </html>
