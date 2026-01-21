@@ -15,36 +15,48 @@
             justify-content: center; 
             align-items: center; 
             text-align: center;
-            /* LATAR TERANG YANG BAGUS (Soft Gradient) */
-            background: #ffffff;
-            background: linear-gradient(135deg, #fff5f5 0%, #fffbf2 50%, #f0fdf4 100%);
+            /* WARNA TERANG YANG PAS (Soft Gradient Sky) */
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
             color: #334155;
             overflow: hidden;
             touch-action: none;
         }
 
+        /* EFEK GELEMBUNG LATAR BELAKANG */
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            bottom: -50px;
+            animation: move 10s infinite linear;
+            z-index: 1;
+        }
+        @keyframes move {
+            from { transform: translateY(0); opacity: 0.5; }
+            to { transform: translateY(-110vh); opacity: 0; }
+        }
+
         .container { 
-            background: rgba(255, 255, 255, 0.8); 
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
             padding: 40px 30px; 
             border-radius: 30px; 
             max-width: 350px; 
             width: 85%;
-            /* Border tipis biar mewah */
-            border: 1px solid rgba(255, 255, 255, 1); 
-            /* Shadow lembut biar efek melayang */
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.5); 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
             z-index: 10;
+            position: relative;
         }
         
-        h1 { color: #d97706; font-size: 2.5rem; margin: 0; font-family: 'Fredoka', sans-serif; }
+        h1 { color: #0284c7; font-size: 2.5rem; margin: 0; font-family: 'Fredoka', sans-serif; }
         #messageContent { display: none; margin-top: 20px; }
         
         .ps { 
             font-family: 'Fredoka', sans-serif; 
             font-size: 1.3rem; 
-            color: #db2777; 
+            color: #be185d; 
             margin-top: 20px; 
             display: block;
         }
@@ -53,21 +65,21 @@
             display: inline-block; 
             margin-top: 25px; 
             padding: 12px 20px;
-            background: #fee2e2; 
-            border: 1px solid #ef4444;
-            color: #b91c1c; 
+            background: #f0f9ff; 
+            border: 1px solid #0ea5e9;
+            color: #0369a1; 
             text-decoration: none; 
             border-radius: 12px; 
             font-size: 0.85rem; 
             font-weight: bold; 
             transition: 0.3s;
         }
-        .yt-link:hover { background: #ef4444; color: #fff; }
+        .yt-link:hover { background: #0ea5e9; color: #fff; }
 
         .warning-text { font-size: 0.75rem; color: #64748b; margin-top: 20px; font-style: italic; }
         
         .btn-open { 
-            background: #d97706; 
+            background: #0284c7; 
             color: #fff; 
             padding: 16px 35px; 
             border: none; 
@@ -76,10 +88,9 @@
             cursor: pointer; 
             margin-top: 25px; 
             font-size: 1rem;
-            box-shadow: 0 10px 15px rgba(217, 119, 6, 0.2);
+            box-shadow: 0 10px 20px rgba(2, 132, 199, 0.2);
         }
 
-        /* Style untuk partikel (Warna-warni cerah) */
         .particle {
             position: fixed;
             border-radius: 50%;
@@ -92,6 +103,11 @@
     </style>
 </head>
 <body onmousedown="pop(event)" ontouchstart="pop(event)">
+
+    <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-duration: 8s;"></div>
+    <div class="bubble" style="width: 20px; height: 20px; left: 30%; animation-duration: 12s;"></div>
+    <div class="bubble" style="width: 50px; height: 50px; left: 70%; animation-duration: 10s;"></div>
+    <div class="bubble" style="width: 30px; height: 30px; left: 85%; animation-duration: 15s;"></div>
 
     <div class="container">
         <div id="intro">
@@ -114,7 +130,7 @@
             </div>
             
             <div id="afterEffect" style="display: none; padding: 10px;">
-                <h2 style="color: #d97706;">Oops!</h2>
+                <h2 style="color: #0284c7;">Oops!</h2>
                 <p>Pesannya sudah hangus! Siapa suruh nggak di-screenshot? Hehe 😜</p>
             </div>
         </div>
@@ -132,11 +148,10 @@
             const particle = document.createElement('div');
             particle.classList.add('particle');
             document.body.appendChild(particle);
-            const size = Math.floor(Math.random() * 10 + 5);
+            const size = Math.floor(Math.random() * 8 + 4);
             particle.style.width = `${size}px`;
             particle.style.height = `${size}px`;
-            // Warna partikel cerah (Pink, Gold, Sky Blue)
-            const colors = ['#f472b6', '#fbbf24', '#38bdf8', '#c084fc'];
+            const colors = ['#38bdf8', '#fbbf24', '#f472b6', '#34d399'];
             const color = colors[Math.floor(Math.random() * colors.length)];
             particle.style.background = color;
             const destinationX = x + (Math.random() - 0.5) * 500;
@@ -146,8 +161,7 @@
                 { transform: `translate(${destinationX}px, ${destinationY}px) scale(0)`, opacity: 0 }
             ], {
                 duration: 1000 + Math.random() * 1000,
-                easing: 'cubic-bezier(0, .9, .57, 1)',
-                delay: Math.random() * 50
+                easing: 'cubic-bezier(0, .9, .57, 1)'
             });
             animation.onfinish = () => { particle.remove(); };
         }
@@ -165,8 +179,8 @@
             }, 30000);
             var end = Date.now() + (3 * 1000); 
             (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 65, origin: { x: 0 }, colors: ['#f472b6', '#fbbf24'] });
-                confetti({ particleCount: 5, angle: 120, spread: 65, origin: { x: 1 }, colors: ['#f472b6', '#fbbf24'] });
+                confetti({ particleCount: 5, angle: 60, spread: 70, origin: { x: 0 }, colors: ['#0284c7', '#f472b6'] });
+                confetti({ particleCount: 5, angle: 120, spread: 70, origin: { x: 1 }, colors: ['#0284c7', '#f472b6'] });
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
         }
